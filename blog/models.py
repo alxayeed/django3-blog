@@ -4,6 +4,13 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+# custom model manager
+
+
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super(PublishedManager, self).get_queryset().filter(status='published')
+
 
 class Post(models.Model):
     STATUS_CHOICES = (
@@ -28,3 +35,6 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    objects = models.Manager()  # default manager
+    published = PublishedManager()
