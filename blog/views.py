@@ -4,7 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from django.http import HttpResponse
 from .forms import emailForm
 from django.core.mail import send_mail
-import credentials #python file to store sensitive data
+from mysite import credentials  # python file to store sensitive data
 # Create your views here.
 
 
@@ -42,6 +42,7 @@ def post_details(request, year, month, day, post):
 
 
 def share(request, post_id):
+    print(credentials.USER)
     post = get_object_or_404(Post, id=post_id, status='published')
     sent = False
 

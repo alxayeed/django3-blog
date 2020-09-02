@@ -6,11 +6,11 @@ share post
 {% block content %}
 {% if sent %}
 <h1>You mail has been sent sucessfully!</h1>
-Your recommendation for"<b><i>{{ post.title }}</i></b>" has successfully sent to
+Your recommendation for '<b><i>{{ post.title }}</i></b>'' has successfully sent to
 <b>{{ form.cleaned_data.recipient_email}}</b>
 Thanks for staying with us!
 {% else %}
-<h2>Share <i><b>"{{ post.title }}"</b></i> via Email</h2>
+<h2>Share <i><b>'{{ post.title }}'</b></i> via Email</h2>
 <form method="POST">
     {{ form.as_p }}
     {% csrf_token %}
