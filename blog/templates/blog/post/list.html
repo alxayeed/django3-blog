@@ -1,0 +1,15 @@
+{% extends 'blog/base.html' %} {% block title %} Post List {% endblock %}
+{%block content %}
+<h2>This is my blog</h2>
+{% for post in posts %}
+
+<h2>
+  <a style="text-decoration: none" href="{{ post.get_absolute_url }}">{{post.title}}</a>
+</h2>
+
+<p class="date">Published {{ post.publish }} by {{ post.author }}</p>
+
+{{ post.body|truncatewords:10|linebreaks }} {% endfor %}
+
+{% include 'blog/post/paginator.html' with page=posts %}
+{% endblock %}
