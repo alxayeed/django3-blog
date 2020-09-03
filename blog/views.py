@@ -5,11 +5,21 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import emailForm, CommentForm
 from django.core.mail import send_mail
 from mysite import credentials  # python file to store sensitive data
+from taggit.models import Tag
 
 
-def post_list(request):
+def post_list(request, tag_slug=None):
     published_posts = Post.published.all()
     # a paginator object , attributes -> count, num_pages, page_range
+
+    # TAGGING
+    tag = None
+
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        published_posts = published_posts.filter(tags__in=[tag])
+
+    # PAGINATION
     paginator = Paginator(published_posts, 2, orphans=1)
     # get current page number of the content from GET request
     page_number = request.GET.get('page')
@@ -26,7 +36,7 @@ def post_list(request):
         # if no next page,get items of the last number of page
         posts = paginator.page(paginator.num_pages)
 
-    return render(request, 'blog/post/list.html', {'posts': posts})
+    return render(request, 'blog/post/list.html', {'posts': posts, 'tag': tag})
 
 
 def post_details(request, year, month, day, post):
