@@ -11,6 +11,18 @@
         Share via email
     </a>
 </p>
+
+<h1>Posts You may like</h1>
+
+{% for similar in similar_posts %}
+
+<p>
+    <a href="{{ similar.get_absolute_url }}">{{ similar.title }}</a>
+</p>
+
+{% empty %}
+There are no Similar posts
+{% endfor %}
 <h1> Comment Section</h1>
 {% with page_comments.paginator.object_list.count as total_comment %}
 {{ total_comment}} comment{{ total_comment|pluralize }}

@@ -6,6 +6,7 @@ from .forms import emailForm, CommentForm
 from django.core.mail import send_mail
 from mysite import credentials  # python file to store sensitive data
 from taggit.models import Tag
+from django.db.models import Count
 
 
 def post_list(request, tag_slug=None):
@@ -76,7 +77,17 @@ def post_details(request, year, month, day, post):
     except PageNotAnInteger:
         page_comments = paginator.page(1)
 
-    return render(request, 'blog/post/detail.html', {'post': post, 'comment_form': comment_form, 'page_comments': page_comments, 'comment_made': comment_made})
+    # RETRIEVING SIMILAR POST
+    tags_id = post.tags.values_list('id', flat=True)
+    similar_posts = Post.published.filter(tags__in=tags_id).exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count(
+        'tags')).order_by('-same_tags', '-publish')[:4]
+
+    return render(request, 'blog/post/detail.html', {
+        'post': post, 'comment_form': comment_form,
+        'page_comments': page_comments,
+        'comment_made': comment_made,
+        'similar_posts': similar_posts})
 
 
 def share(request, post_id):
