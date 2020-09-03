@@ -37,5 +37,11 @@
 </form>
 {% else %}
 <h6>Your comment has sucessfully recorded. Thanks for your feedback!</h6>
+<!-- <h3>Comment Again?</h3>
+<form method="POST">
+    {{ comment_form }}
+    {% csrf_token %}
+    <input type="submit" value="Submit Your Response">
+</form> -->
 {% endif %}
 {% endblock %}

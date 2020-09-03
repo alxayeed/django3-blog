@@ -49,6 +49,7 @@ def post_details(request, year, month, day, post):
         # print(comment_form)
 
     else:
+        comment_made = comment_made
         comment_form = CommentForm()
 
     # to get existed comment for this post
