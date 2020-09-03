@@ -12,11 +12,11 @@
     </a>
 </p>
 <h1> Comment Section</h1>
-{% with comments.count as total_comment %}
+{% with page_comments.paginator.object_list.count as total_comment %}
 {{ total_comment}} comment{{ total_comment|pluralize }}
 {% endwith %}
 <br>
-{% for comment in comments %}
+{% for comment in page_comments %}
 <div class="comment">
     <p class="info">
         Comment {{ forloop.counter }} by {{ comment.name }},
@@ -26,6 +26,8 @@
 </div>
 {% endfor %}
 
+{% include 'blog/post/paginator.html' with page=page_comments %}
+
 {% if not comment_made %}
 <h1>Let us know your thoughts too!</h1>
 <form method="POST">
@@ -34,6 +36,6 @@
     <input type="submit" value="Submit Your Response">
 </form>
 {% else %}
-<h1>Your comment has sucessfully record. Thanks for your feedback!</h1>
+<h6>Your comment has sucessfully recorded. Thanks for your feedback!</h6>
 {% endif %}
 {% endblock %}
