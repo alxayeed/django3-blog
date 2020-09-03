@@ -2,12 +2,10 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
+from taggit.managers import TaggableManager
 
-# Create your models here.
 
 # custom model manager
-
-
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super(PublishedManager, self).get_queryset().filter(status='published')
@@ -39,6 +37,7 @@ class Post(models.Model):
 
     objects = models.Manager()  # default manager
     published = PublishedManager()
+    tags = TaggableManager()
 
     def get_absolute_url(self):
         return reverse('blog:post_detail',
