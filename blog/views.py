@@ -36,20 +36,8 @@ def post_details(request, year, month, day, post):
                              publish__month=month,
                              publish__day=day,
                              )
-    comments = post.comment.filter(active='True')
+
     comment_made = None
-
-    # Pagination for maximum 3 comment per page
-    paginator = Paginator(comments, 3)
-    page = request.GET.get('page')
-
-    try:
-        page_comments = paginator.page(page)
-    except EmptyPage:
-        page_comments = paginator.page(paginator.num_pages)
-    except PageNotAnInteger:
-        page_comments = paginator.page(1)
-
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
@@ -62,6 +50,20 @@ def post_details(request, year, month, day, post):
 
     else:
         comment_form = CommentForm()
+
+    # to get existed comment for this post
+    comments = post.comment.filter(active='True')
+
+    # Pagination for maximum 3 comment per page
+    paginator = Paginator(comments, 3)
+    page = request.GET.get('page')
+
+    try:
+        page_comments = paginator.page(page)
+    except EmptyPage:
+        page_comments = paginator.page(paginator.num_pages)
+    except PageNotAnInteger:
+        page_comments = paginator.page(1)
 
     return render(request, 'blog/post/detail.html', {'post': post, 'comment_form': comment_form, 'page_comments': page_comments, 'comment_made': comment_made})
 
