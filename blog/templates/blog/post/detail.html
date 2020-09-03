@@ -11,4 +11,29 @@
         Share via email
     </a>
 </p>
+<h1> Comment Section</h1>
+{% with comments.count as total_comment %}
+{{ total_comment}} comment{{ total_comment|pluralize }}
+{% endwith %}
+<br>
+{% for comment in comments %}
+<div class="comment">
+    <p class="info">
+        Comment {{ forloop.counter }} by {{ comment.name }},
+        {{ comment.created|date:'D d M Y' }}
+    </p>
+    {{ comment.body|truncatewords:10 }}
+</div>
+{% endfor %}
+
+{% if not comment_made %}
+<h1>Let us know your thoughts too!</h1>
+<form method="POST">
+    {{ comment_form }}
+    {% csrf_token %}
+    <input type="submit" value="Submit Your Response">
+</form>
+{% else %}
+<h1>Your comment has sucessfully record. Thanks for your feedback!</h1>
+{% endif %}
 {% endblock %}

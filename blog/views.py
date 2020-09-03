@@ -1,11 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Post
+from .models import Post, Comment
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from django.http import HttpResponse
-from .forms import emailForm
+from .forms import emailForm, CommentForm
 from django.core.mail import send_mail
 from mysite import credentials  # python file to store sensitive data
-# Create your views here.
 
 
 def post_list(request):
@@ -37,8 +36,23 @@ def post_details(request, year, month, day, post):
                              publish__month=month,
                              publish__day=day,
                              )
+    comments = post.comment.filter(active='True')
+    comment_made = None
 
-    return render(request, 'blog/post/detail.html', {'post': post})
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            # Only creates a Comment() obj, does not save to db
+            comment_made = comment_form.save(commit=False)
+            comment_made.post = post  # bind this comment to this post
+            comment_made.save()
+            print(comment_made.post)
+        # print(comment_form)
+
+    else:
+        comment_form = CommentForm()
+
+    return render(request, 'blog/post/detail.html', {'post': post, 'comment_form': comment_form, 'comments': comments, 'comment_made': comment_made})
 
 
 def share(request, post_id):

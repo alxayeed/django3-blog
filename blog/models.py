@@ -48,5 +48,22 @@ class Post(models.Model):
                              self.slug])
 
 
-class email(models.Model):
-    pass
+class Comment(models.Model):
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name="comment")
+    """ that means,Post object will have a backward relation to Comment object with 'comment' name , eg- post.comment.all()
+     (default related_name value will be 'comments_set'). 
+     If related_name value is '+' , or ends with '+', Post will not have backward relation to Comment
+     """
+
+    name = models.CharField(max_length=30)
+    email = models.EmailField()
+    body = models.TextField(max_length=250)
+    created = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f'Comment by {self.name}'
+
+    class Meta:
+        ordering = ["created"]

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post
+from .models import Post, Comment
 
 # Register your models here.
 
@@ -16,3 +16,13 @@ class PostAdmin(admin.ModelAdmin):
     date_hierarchy = 'created'  # created a a date navigator hierarchy on the top
     # creates list order, overrides Meta class of Post
     ordering = ('status', 'publish')
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['name', 'email', 'body',
+                    'created', 'active', ]
+    list_filter = ['active', 'created']
+    search_fields = ['name', 'email']
+
+
+admin.site.register(Comment, CommentAdmin)
