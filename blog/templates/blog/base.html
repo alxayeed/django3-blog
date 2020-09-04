@@ -1,18 +1,40 @@
+{% load blog_tags %}
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %} default title {% endblock %}</title>
-    <link rel="stylesheet" href="{% static "blog/css/blog.css" %}">
-  </head>
-  <body>
-    <div id="content">{% block content %} {% endblock %}</div>
 
-    <div id="sidebar">
-      <h2>My blog</h2>
-      <p>This is the side bar</p>
-    </div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %} default title {% endblock %}</title>
+  <link rel="stylesheet" href="{% static "blog/css/blog.css" %}">
+</head>
+
+<body>
+  <div id="content">{% block content %} {% endblock %}</div>
+
+  <div id="sidebar">
+    <h2>My blog</h2>
+    <p>This is the side bar</p>
+    <h1>Total Post</h1>
+    There is total {% count_posts %} posts in the blog
+    <h1>Most Commented Post</h1>
+    {% most_commented_posts 3 as most_commented_post %}
+    {% for post in most_commented_post %}
+    <ul>
+      <li> <a href="{{ post.get_absolute_url }}">{{ post.title }}</a> </li>
+    </ul>
+    {% endfor %}
+
+    {# Recent posts #}
+    {% recent_posts 3 %}
+    <!-- {% for post in recent_posts %}
+    <ul>
+      <li> <a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+    </ul>
+    {% endfor %} -->
+  </div>
+</body>
+
 </html>
